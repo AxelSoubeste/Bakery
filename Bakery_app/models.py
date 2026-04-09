@@ -7,3 +7,11 @@ class Catalog(models.Model):
 
     def __str__(self):
         return self.product_name
+
+class User(models.Model):
+    id = models.IntegerField(primary_key=True)
+    user_name = models.CharField(max_length=50, unique=True, null=False, blank=False)
+    password = models.CharField(max_length=128, null=False, blank=False)
+    
+    def __str__(self):
+        return self.user_name
