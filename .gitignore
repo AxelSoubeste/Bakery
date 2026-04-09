@@ -1,0 +1,57 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv/
+
+# Archivos de entorno
+.env
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# Archivos estáticos compilados
+staticfiles/
+
+# Media (opcional, si subís archivos)
+media/
+
+# Migraciones (opcional: si trabajás en equipo NO ignorarlas)
+# Bakery_app/migrations/*
+# !Bakery_app/migrations/__init__.py
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Configuración de VS Code
+.vscode/
+
+# Configuración de PyCharm
+.idea/
+
+# Archivos temporales
+*.swp
+*~
+
+# Coverage / testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Archivos de seguridad
+*.pem
+*.key
