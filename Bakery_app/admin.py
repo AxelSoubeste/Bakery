@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Catalog
+from .models import Product
 
 # Register your models here.
-@admin.register(Catalog)
-class CatalogAdmin(admin.ModelAdmin):
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_name', 'price')

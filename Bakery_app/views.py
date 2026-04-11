@@ -4,6 +4,7 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from functools import wraps
 from django.contrib.auth.models import User
+from .models import Product
 
 def staff_required(view_func):
     @wraps(view_func)
@@ -26,7 +27,8 @@ def catalog(request):
 
 @staff_required
 def dashboard(request):
-    return render(request, 'Bakery_app/dashboard.html')
+    products = Product.objects.all()
+    return render(request, 'Bakery_app/dashboard.html', {'products': products})
 
 def login_view(request):
     if request.method == 'POST':
@@ -74,3 +76,50 @@ def register_user(request):
 
         return redirect('login')
     return render(request, 'Bakery_app/register.html')
+
+@staff_required
+def add_product(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        image = request.POST.get('image')
+        stock = int(request.POST.get('stock'))
+
+        Product.objects.create(
+            name=name,
+            price=price,
+            image=image,
+            stock=stock
+        )
+
+        return redirect('dashboard')
+    return render(request, 'Bakery_app/add_products.html')
+
+def catalog(request):
+    products = Product.objects.all()
+    return render(request, 'Bakery_app/catalog.html', {'products': products})
+
+def edit_product(request, id):
+    product = Product.objects.get(id=id)
+
+    if request.method == 'POST':
+        product.name = request.POST.get('name')
+        product.price = request.POST.get('price')
+        product.stock = request.POST.get('stock')
+
+        if request.FILES.get('image'):
+            product.image = request.FILES.get('image')
+
+        product.save()
+        return redirect('dashboard')
+        
+    return render(request, 'Bakery_app/edit_product.html', {'product': product})
+
+def delete_product(request, id):
+    product = Product.objects.get(id=id)
+
+    if request.method == 'POST':
+        product.delete()
+        return redirect('dashboard')
+    
+    return redirect('dashboard')

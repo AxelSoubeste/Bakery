@@ -4,4 +4,31 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+
+<h2>Panel of Products</h2>
+
+<a href="{% url 'add_product' %}">Add Products</a>
+
+<hr>
+
+{% for product in products %}
+    <div>
+        <h3>{{ product.name }}</h3>
+        <p>Price: ${{ product.price }}</p>
+        <p>Stock: {{ product.stock }}</p>
+        <img src="{{ product.image.url }}" width="150">
+
+        <br>
+
+        <a href="{% url 'edit_product' product.id %}">✏️ Edit</a>
+
+        <form action="{% url 'delete_product' product.id %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">🗑️ Delete</button>
+        </form>
+
+        <hr>
+    </div>
+{% endfor %}
+
 {% endblock %}
