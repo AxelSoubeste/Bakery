@@ -2,22 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-        <title>{% block title %}Bakery{% endblock %}</title>
+        <title>{% block title %}Yara's Bakery{% endblock %}</title>
 
         {% load static %}
 </head>
 <body>
-    {% block content %}
-
     <nav>
         {% if user.is_authenticated %}
             <a href="{% url 'dashboard' %}">My panel</a>
-            <a href="Bakery_app/logout.html">LogOut</a>
+            
+            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="sumbit">LogOut</button>
+            </form>
+
         {% else %}
             <a href="{% url 'login' %}">LogIn</a>
         {% endif %}
     </nav>
 
+    {% block content %}
     {% endblock %}
 </body>
 </html>

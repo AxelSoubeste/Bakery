@@ -4,4 +4,16 @@
 {% block title %}LogIn{% endblock %}
 
 {% block content %}
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="User">
+        <input type="text" name="password" placeholder="Password">
+
+        <button type="submit">LogIn</button>
+    </form>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
 {% endblock %}
