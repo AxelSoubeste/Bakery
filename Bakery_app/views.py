@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from functools import wraps
+from django.contrib.auth.models import User
 
 def staff_required(view_func):
     @wraps(view_func)
@@ -44,3 +45,32 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+def register_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        confirm_password = request.POST.get('confirm_password')
+
+        if not confirm_password:
+            return render(request, 'Bakery_app/register.html', {
+                'error': 'You have to confirm the password'
+            })
+
+        if password != confirm_password:
+            return render(request, 'Bakery_app/register.html', {
+                'error': 'The passwords do not match'
+            })
+        
+        if User.objects.filter(username=username).exists():
+            return render(request, 'Bakery_app/register.html', {
+                'error', 'The user already exist'
+            })
+
+        user = User.objects.create_user(username=username, password=password)
+        user.is_staff = False
+        user.is_superuser = False
+        user.save()
+
+        return redirect('login')
+    return render(request, 'Bakery_app/register.html')

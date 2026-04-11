@@ -11,16 +11,17 @@
     {% if user.is_authenticated %}
 
         {% if user.is_staff %}
-            <a href="{% url 'dashboard' %}">My panel</a>
+            <a href="{% url 'dashboard' %}">My Panel</a>
         {% endif %}
 
         <form action="{% url 'logout' %}" method="POST" style="display: inline;">
             {% csrf_token %}
-            <button type="submit">LogOut</button>
+            <button type="submit">Log Out</button>
         </form>
 
     {% else %}
-        <a href="{% url 'login' %}">LogIn</a>
+        <a href="{% url 'login' %}">Log In</a>
+        <a href="{% url 'register' %}">Register User</a>
     {% endif %}
 </nav>
 
