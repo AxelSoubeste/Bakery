@@ -99,6 +99,7 @@ def catalog(request):
     products = Product.objects.all()
     return render(request, 'Bakery_app/catalog.html', {'products': products})
 
+@staff_required
 def edit_product(request, id):
     product = Product.objects.get(id=id)
 
@@ -115,6 +116,7 @@ def edit_product(request, id):
         
     return render(request, 'Bakery_app/edit_product.html', {'product': product})
 
+@staff_required
 def delete_product(request, id):
     product = Product.objects.get(id=id)
 
