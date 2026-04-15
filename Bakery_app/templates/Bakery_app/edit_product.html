@@ -17,7 +17,11 @@
     <input type="number" name="stock" value="{{ product.stock }}" min="0" required>
 
     <p>Current image:</p>
-    <img src="{{ product.image.url }}" width="150">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" width="150">
+    {% else %}
+        <p>No image</p>
+    {% endif %}
 
     <input type="file" name="image">
 

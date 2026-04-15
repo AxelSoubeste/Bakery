@@ -93,7 +93,7 @@ def add_product(request):
         )
 
         return redirect('dashboard')
-    return render(request, 'Bakery_app/add_products.html')
+    return render(request, 'Bakery_app/add_product.html')
 
 def catalog(request):
     products = Product.objects.all()

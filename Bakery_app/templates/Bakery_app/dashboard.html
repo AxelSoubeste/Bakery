@@ -16,7 +16,11 @@
         <h3>{{ product.name }}</h3>
         <p>Price: ${{ product.price }}</p>
         <p>Stock: {{ product.stock }}</p>
-        <img src="{{ product.image.url }}" width="150">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" width="150">
+        {% else %}
+            <p>No image</p>
+        {% endif %}
 
         <br>
 
