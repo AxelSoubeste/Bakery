@@ -125,3 +125,39 @@ def delete_product(request, id):
         return redirect('dashboard')
     
     return redirect('dashboard')
+
+def add_to_cart(request, product_id):
+    cart = request.session.get('cart', {})
+
+    if str(product_id) in cart:
+        cart[str(product_id)]['stock'] += 1
+    else:
+        product = Product.objects.get(id=product_id)
+
+        cart[str(product_id)] = {
+            'name': product.name,
+            'price': float(product.price),
+            'stock': 1
+        }
+    
+    request.session['cart'] = cart
+
+    return redirect('catalog')
+
+def delete_to_cart(request, product_id):
+    cart = request.session.get('cart', {})
+
+    if str(product_id) in cart:
+        del cart[str(product_id)]
+
+        request.session['cart'] = cart
+        return redirect('cart')
+
+def cart_view(request):
+    cart = request.session.get('cart', {})
+    total = sum(item['price'] * item['stock'] for item in cart.values())
+
+    return render(request, 'cart.html', {
+        'cart': cart,
+        'total': total
+    })
