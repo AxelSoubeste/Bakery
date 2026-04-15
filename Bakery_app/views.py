@@ -194,10 +194,7 @@ def checkout(request):
 
     total = sum(item["price"] * item["quantity"] for item in cart.values())
 
-    order = Order.objects.create(
-        user=request.user,
-        total=total
-    )
+    order = Order.objects.create(user=request.user)
 
     for key, item in cart.items():
         product = Product.objects.get(id=key)
