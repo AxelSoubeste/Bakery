@@ -1,18 +1,39 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='products/')
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.IntegerField(default=0)
+    stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.product_name
+        return self.name
 
-class User(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user_name = models.CharField(max_length=50, unique=True, null=False, blank=False)
-    password = models.CharField(max_length=128, null=False, blank=False)
-    
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='pending')
+
+    @property
+    def total_calculated(self):
+        return sum(item.subtotal for item in self.items.all())
+
     def __str__(self):
-        return self.user_name
+        return f"Order {self.id}"
+
+
+class ItemOrder(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    @property
+    def subtotal(self):
+        return self.quantity * self.price
+
+    def __str__(self):
+        return f"{self.product.name} x{self.quantity}"
