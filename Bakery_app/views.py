@@ -4,8 +4,10 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from functools import wraps
 from django.contrib.auth.models import User
-from .models import Product
+from .models import Product, Order, ItemOrder
 from django.contrib import messages
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
 def staff_required(view_func):
     @wraps(view_func)
@@ -182,3 +184,56 @@ def empty_cart(request):
     request.session['cart'] = {}
     messages.success(request, 'Empty cart')
     return redirect('catalog')
+
+@login_required
+def checkout(request):
+    cart = request.session.get("cart", {})
+
+    if not cart:
+        return redirect("catalog")
+
+    total = sum(item["price"] * item["quantity"] for item in cart.values())
+
+    order = Order.objects.create(
+        user=request.user,
+        total=total
+    )
+
+    for key, item in cart.items():
+        product = Product.objects.get(id=key)
+
+        ItemOrder.objects.create(
+            order=order,
+            product=product,
+            quantity=item["quantity"],
+            price=item["price"]
+        )
+
+    
+    request.session["cart"] = {}
+
+    return redirect("Successful order")
+
+def generate_invoice(request, id):
+    order = Order.objects.get(id=id)
+    items = ItemOrder.objects.filter(order=order)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="invoice_{id}.pdf"'
+
+    doc = SimpleDocTemplate(response)
+    styles = getSampleStyleSheet()
+
+    content = []
+
+    content.append(Paragraph(f"Invoice Order #{order.id}", styles["Title"]))
+
+    for item in items:
+        text = f"{item.product.name} - {item.quantity} x ${item.price}"
+        content.append(Paragraph(text, styles["Normal"]))
+
+    content.append(Paragraph(f"Total: ${order.total}", styles["Heading2"]))
+
+    doc.build(content)
+
+    return response
