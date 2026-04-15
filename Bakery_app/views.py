@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from functools import wraps
 from django.contrib.auth.models import User
 from .models import Product
+from django.contrib import messages
 
 def staff_required(view_func):
     @wraps(view_func)
@@ -23,7 +24,8 @@ def home(request):
     return render(request, 'Bakery_app/home.html')
 
 def catalog(request):
-    return render(request, 'Bakery_app/catalog')
+    product = Product.objects.all()
+    return render(request, 'Bakery_app/catalog.html', {'product': product})
 
 @staff_required
 def dashboard(request):
@@ -66,7 +68,7 @@ def register_user(request):
         
         if User.objects.filter(username=username).exists():
             return render(request, 'Bakery_app/register.html', {
-                'error', 'The user already exist'
+                'error': 'The user already exist'
             })
 
         user = User.objects.create_user(username=username, password=password)
@@ -126,38 +128,52 @@ def delete_product(request, id):
     
     return redirect('dashboard')
 
-def add_to_cart(request, product_id):
+def add_to_cart(request, id):
     cart = request.session.get('cart', {})
 
-    if str(product_id) in cart:
-        cart[str(product_id)]['stock'] += 1
+    if str(id) in cart:
+        cart[str(id)]['stock'] += 1
     else:
-        product = Product.objects.get(id=product_id)
+        product = Product.objects.get(id=id)
 
-        cart[str(product_id)] = {
+        cart[str(id)] = {
             'name': product.name,
             'price': float(product.price),
             'stock': 1
         }
     
     request.session['cart'] = cart
-
+    messages.success(request, 'Product added to the cart')
     return redirect('catalog')
 
-def delete_to_cart(request, product_id):
+def delete_to_cart(request, id):
     cart = request.session.get('cart', {})
 
-    if str(product_id) in cart:
-        del cart[str(product_id)]
+    if str(id) in cart:
+        del cart[str(id)]
 
-        request.session['cart'] = cart
-        return redirect('cart')
+    request.session['cart'] = cart
+    messages.success(request, 'Product deleted to the cart')
+    return redirect('catalog')
 
 def cart_view(request):
     cart = request.session.get('cart', {})
     total = sum(item['price'] * item['stock'] for item in cart.values())
 
-    return render(request, 'cart.html', {
+    return render(request, 'Bakery_app/cart.html', {
         'cart': cart,
         'total': total
     })
+
+def remove_product(request, id):
+    cart = request.session.get('cart', {})
+
+    if str(id) in cart:
+        cart[str(id)]['stock'] -= 1
+
+        if cart[str(id)]['stock'] <= 0:
+            del cart[str(id)]
+    
+    request.session['cart'] = cart
+    messages.success(request, 'Product removed to the cart')
+    return redirect('catalog')

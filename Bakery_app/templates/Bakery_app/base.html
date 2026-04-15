@@ -19,11 +19,20 @@
             <button type="submit">Log Out</button>
         </form>
 
-    {% else %}
-        <a href="{% url 'login' %}">Log In</a>
-        <a href="{% url 'register' %}">Register User</a>
+        {% else %}
+            <a href="{% url 'login' %}">Log In</a>
+            <a href="{% url 'register' %}">Register User</a>
+        {% endif %}
+        <a href="{% url 'cart_view' %}">
+            Cart ({{ request.session.cart|length }})
+        </a>
+    </nav>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
     {% endif %}
-</nav>
 
     {% block content %}
     {% endblock %}

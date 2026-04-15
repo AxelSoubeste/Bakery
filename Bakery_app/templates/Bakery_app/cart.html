@@ -1,0 +1,14 @@
+{% extends 'Bakery_app/base.html' %}
+{% load static %}
+
+{% block title %}Yara's Bakery{% endblock %}
+
+{% block content %}
+<h2>Cart</h2>
+
+{% for key, item in cart.items %}
+    <p>{{ item.name }} - {{ item.stock }} x ${{ item.price }}</p>
+{% endfor %}
+
+<h3>Total: ${{ total }}</h3>
+{% endblock %}
