@@ -177,3 +177,8 @@ def remove_product(request, id):
     request.session['cart'] = cart
     messages.success(request, 'Product removed to the cart')
     return redirect('catalog')
+
+def empty_cart(request):
+    request.session['cart'] = {}
+    messages.success(request, 'Empty cart')
+    return redirect('catalog')
