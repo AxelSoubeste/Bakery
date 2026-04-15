@@ -82,7 +82,7 @@ def add_product(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         price = request.POST.get('price')
-        image = request.POST.get('image')
+        image = request.FILES.get('image')
         stock = int(request.POST.get('stock'))
 
         Product.objects.create(
