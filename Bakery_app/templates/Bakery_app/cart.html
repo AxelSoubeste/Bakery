@@ -4,6 +4,8 @@
 {% block title %}Yara's Bakery{% endblock %}
 
 {% block content %}
+<a href="{% url 'home' %}"><button>Back</button></a>
+
 <h2>Cart</h2>
 
 {% for key, item in cart.items %}
@@ -11,4 +13,6 @@
 {% endfor %}
 
 <h3>Total: ${{ total }}</h3>
+
+<a href="{% url 'checkout' %}"><button type="submit">Buy</button></a>
 {% endblock %}

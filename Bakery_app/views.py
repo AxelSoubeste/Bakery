@@ -134,14 +134,14 @@ def add_to_cart(request, id):
     cart = request.session.get('cart', {})
 
     if str(id) in cart:
-        cart[str(id)]['stock'] += 1
+        cart[str(id)]['quantity'] += 1
     else:
         product = Product.objects.get(id=id)
 
         cart[str(id)] = {
             'name': product.name,
             'price': float(product.price),
-            'stock': 1
+            'quantity': 1
         }
     
     request.session['cart'] = cart
@@ -160,7 +160,7 @@ def delete_to_cart(request, id):
 
 def cart_view(request):
     cart = request.session.get('cart', {})
-    total = sum(item['price'] * item['stock'] for item in cart.values())
+    total = sum(item['price'] * item['quantity'] for item in cart.values())
 
     return render(request, 'Bakery_app/cart.html', {
         'cart': cart,
@@ -171,9 +171,9 @@ def remove_product(request, id):
     cart = request.session.get('cart', {})
 
     if str(id) in cart:
-        cart[str(id)]['stock'] -= 1
+        cart[str(id)]['quantity'] -= 1
 
-        if cart[str(id)]['stock'] <= 0:
+        if cart[str(id)]['quantity'] <= 0:
             del cart[str(id)]
     
     request.session['cart'] = cart
@@ -206,10 +206,12 @@ def checkout(request):
             price=item["price"]
         )
 
-    
+        product.stock -= item["quantity"]
+        product.save()
+
     request.session["cart"] = {}
 
-    return redirect("Successful order")
+    return redirect("catalog")
 
 def generate_invoice(request, id):
     order = Order.objects.get(id=id)
@@ -229,8 +231,13 @@ def generate_invoice(request, id):
         text = f"{item.product.name} - {item.quantity} x ${item.price}"
         content.append(Paragraph(text, styles["Normal"]))
 
-    content.append(Paragraph(f"Total: ${order.total}", styles["Heading2"]))
+    content.append(Paragraph(f"Total: ${order.total_calculated}", styles["Heading2"]))
 
     doc.build(content)
 
     return response
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'Bakery_app/my_orders.html', {'orders': orders})

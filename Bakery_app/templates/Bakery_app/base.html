@@ -26,6 +26,7 @@
         <a href="{% url 'cart_view' %}">
             Cart ({{ request.session.cart|length }})
         </a>
+        <a href="{% url 'my_orders' %}">My Orders</a>
     </nav>
 
     {% if messages %}

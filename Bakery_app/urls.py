@@ -17,7 +17,9 @@ urlpatterns = [
     path('delete-to-cart/<int:id>', views.delete_to_cart, name='delete_to_cart'),
     path('cart-view', views.cart_view, name='cart_view'),
     path('remove-product/<int:id>', views.remove_product, name='remove_product'),
-    path('empty-cart', views.empty_cart, name='empty_cart'),
+    path('empty-cart/', views.empty_cart, name='empty_cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('my-orders/', views.my_orders, name='my_orders'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

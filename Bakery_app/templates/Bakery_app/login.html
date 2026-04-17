@@ -4,6 +4,7 @@
 {% block title %}LogIn{% endblock %}
 
 {% block content %}
+<a href="{% url 'home' %}"><button>Back</button></a>
     <form method="POST">
         {% csrf_token %}
 

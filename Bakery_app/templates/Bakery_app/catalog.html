@@ -4,6 +4,9 @@
 {% block title %}Catalog{% endblock %}
 
 {% block content %}
+
+<a href="{% url 'home' %}"><button>Back</button></a>
+
 <a href="{% url 'empty_cart' %}">Empty Cart</a>
 {% for product in products %}
     <hr>
