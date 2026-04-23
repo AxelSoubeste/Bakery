@@ -20,7 +20,10 @@ urlpatterns = [
     path('empty-cart/', views.empty_cart, name='empty_cart'),
     path('checkout/', views.checkout, name='checkout'),
     path('my-orders/', views.my_orders, name='my_orders'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('success/', views.success, name='success'),
+    path('failure/', views.failure, name='failure'),
+    path('pending/', views.pending, name='pending'),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

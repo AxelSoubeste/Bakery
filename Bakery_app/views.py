@@ -8,6 +8,8 @@ from .models import Product, Order, ItemOrder
 from django.contrib import messages
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+import mercadopago
+from django.views.decorators.csrf import csrf_exempt
 
 def staff_required(view_func):
     @wraps(view_func)
@@ -192,26 +194,39 @@ def checkout(request):
     if not cart:
         return redirect("catalog")
 
-    total = sum(item["price"] * item["quantity"] for item in cart.values())
+    order = Order.objects.create(user=request.user, status="pending")
 
-    order = Order.objects.create(user=request.user)
+    sdk = mercadopago.SDK("")
 
+    items = []
     for key, item in cart.items():
-        product = Product.objects.get(id=key)
+        items.append({
+            'title': item['name'],
+            'quantity': item['quantity'],
+            'unit_price': float(item['price'])
+        })
 
-        ItemOrder.objects.create(
-            order=order,
-            product=product,
-            quantity=item["quantity"],
-            price=item["price"]
-        )
+    preference_data = {
+        "items": items,
+        "external_reference": str(order.id),
+        "back_urls": {
+            "success": "http://127.0.0.1:8000/success/",
+            "failure": "http://127.0.0.1:8000/failure/",
+            "pending": "http://127.0.0.1:8000/pending/"
+        }
+    }
 
-        product.stock -= item["quantity"]
-        product.save()
+    preference_response = sdk.preference().create(preference_data)
+    preference = preference_response['response']
 
-    request.session["cart"] = {}
+    if "response" not in preference_response:
+        return HttpResponse("Error Mercado Pago")
 
-    return redirect("catalog")
+    preference = preference_response["response"]
+
+    if "init_point" not in preference:
+        return HttpResponse(f"Error: {preference}")
+    return redirect(preference['init_point'])
 
 def generate_invoice(request, id):
     order = Order.objects.get(id=id)
@@ -241,3 +256,28 @@ def generate_invoice(request, id):
 def my_orders(request):
     orders = Order.objects.filter(user=request.user)
     return render(request, 'Bakery_app/my_orders.html', {'orders': orders})
+
+def success(request):
+    status = request.GET.get("status")
+    order_id = request.GET.get("external_reference")
+
+    if not order_id:
+        return redirect("catalog")
+
+    order = Order.objects.get(id=order_id)
+
+    if status == "approved":
+        order.status = "approved"
+        request.session["cart"] = {}
+    else:
+        order.status = "pending"
+
+    order.save()
+
+    return render(request, "success.html", {"order": order})
+
+def failure(request):
+    return render(request, "Bakery_app/failure.html")
+
+def pending(request):
+    return render(request, "Bakery_app/pending.html")
