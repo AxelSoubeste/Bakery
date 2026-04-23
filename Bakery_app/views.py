@@ -10,6 +10,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 import mercadopago
 from django.views.decorators.csrf import csrf_exempt
+import os
 
 def staff_required(view_func):
     @wraps(view_func)
@@ -196,7 +197,12 @@ def checkout(request):
 
     order = Order.objects.create(user=request.user, status="pending")
 
-    sdk = mercadopago.SDK("")
+    token = os.getenv("MP_ACCESS_TOKEN")
+
+    if not token:
+        raise ValueError("Error with Mercado Pago token")
+    
+    sdk = mercadopago.SDK(token)
 
     items = []
     for key, item in cart.items():
