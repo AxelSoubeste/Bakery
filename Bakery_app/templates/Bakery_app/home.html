@@ -5,9 +5,23 @@
 
 {% block content %}
 
-<h1>Welcome to the Yara's Pastry Shop</h1>
+<div class="home-page">
 
-<p>If you want to know some of our delicious desserts</p>
-<a href="{% url 'catalog' %}">Catalog</a>
+    <div class="home-card">
+
+        <h1>Welcome to Yara's Bakery</h1>
+
+        <p>
+            Discover our delicious desserts, handcrafted pastries
+            and sweet moments made especially for you.
+        </p>
+
+        <a href="{% url 'catalog' %}" class="catalog-btn">
+            View Catalog
+        </a>
+
+    </div>
+
+</div>
 
 {% endblock %}

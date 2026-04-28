@@ -1,20 +1,97 @@
 {% extends 'Bakery_app/base.html' %}
 {% load static %}
 
-{% block title %}LogIn{% endblock %}
+{% block title %}Log In{% endblock %}
 
 {% block content %}
-<a href="{% url 'home' %}"><button>Back</button></a>
-    <form method="POST">
-        {% csrf_token %}
 
-        <input type="text" name="username" placeholder="User">
-        <input type="text" name="password" placeholder="Password">
+<div class="login-page">
 
-        <button type="submit">LogIn</button>
-    </form>
+    <button class="btn-back" onclick="history.back()">Back</button>
 
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+    <div class="login-card">
+
+        <h1>Welcome Back</h1>
+        <p>Log in to continue enjoying our bakery.</p>
+
+        <form method="POST" class="login-form">
+            {% csrf_token %}
+
+            <input type="text" name="username" placeholder="Username" required>
+
+            <div class="password-box">
+
+                <input type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    required>
+
+                <button type="button"
+                        class="toggle-password"
+                        onclick="togglePassword()"
+                        id="eyeBtn">
+
+                    <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5
+                        c4.478 0 8.268 2.943 9.542 7
+                        -1.274 4.057-5.064 7-9.542 7
+                        -4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+
+                    <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        style="display:none;">
+
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13.875 18.825A10.05 10.05 0 0112 19
+                        c-4.478 0-8.268-2.943-9.542-7
+                        a9.97 9.97 0 012.293-3.95M6.228 6.228
+                        A9.956 9.956 0 0112 5c4.478 0 8.268 2.943
+                        9.542 7a9.965 9.965 0 01-4.293 5.774M15 12
+                        a3 3 0 00-3-3m0 0a2.99 2.99 0 00-2.121.879M3 3l18 18"/>
+                    </svg>
+
+                </button>
+
+            </div>
+
+            <button type="submit" class="login-btn">
+                Log In
+            </button>
+        </form>
+
+        {% if error %}
+            <p class="login-error">{{ error }}</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+function togglePassword(){
+
+    const input = document.getElementById("password");
+    const eyeOpen = document.getElementById("eyeOpen");
+    const eyeClosed = document.getElementById("eyeClosed");
+
+    if(input.type === "password"){
+        input.type = "text";
+        eyeOpen.style.display = "none";
+        eyeClosed.style.display = "block";
+    }else{
+        input.type = "password";
+        eyeOpen.style.display = "block";
+        eyeClosed.style.display = "none";
+    }
+}
+</script>
+
 {% endblock %}
