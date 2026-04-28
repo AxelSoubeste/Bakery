@@ -20,21 +20,21 @@
 
         <div class="nav-links">
 
+            {% if user.is_staff %}
+                <a href="{% url 'dashboard' %}">My Panel</a>
+            {% endif %}
+
+            <a href="{% url 'home' %}">Home</a>
+
+            <a href="{% url 'catalog' %}">Catalog</a>
+
+            <a href="{% url 'my_orders' %}">My Orders</a>
+
+            <a href="{% url 'cart_view' %}">
+                Cart ({{ request.session.cart|length }})
+            </a>
+
             {% if user.is_authenticated %}
-
-                {% if user.is_staff %}
-                    <a href="{% url 'dashboard' %}">My Panel</a>
-                {% endif %}
-
-                <a href="{% url 'home' %}">Home</a>
-
-                <a href="{% url 'catalog' %}">Catalog</a>
-
-                <a href="{% url 'my_orders' %}">My Orders</a>
-
-                <a href="{% url 'cart_view' %}">
-                    Cart ({{ request.session.cart|length }})
-                </a>
 
                 <form action="{% url 'logout' %}" method="POST">
                     {% csrf_token %}

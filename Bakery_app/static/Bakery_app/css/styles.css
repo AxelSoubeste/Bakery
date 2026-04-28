@@ -13,14 +13,17 @@ body{
 }
 
 .navbar{
-    position: relative;
+    position:sticky;
+    top:0;
+    z-index:1000;
+
     display:flex;
     align-items:center;
     justify-content:flex-end;
 
     padding:20px 50px;
-    background: rgba(255,255,255,0.75);
-    backdrop-filter: blur(10px);
+    background:#d8c3a5;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
 
 .logo{
@@ -88,9 +91,10 @@ body{
 }
 
 .btn-back{
-    position:absolute;
-    top:30px;
-    left:30px;
+    position:fixed;
+    top:12px;
+    left:20px;
+    z-index:9999;
 
     border:none;
     background:#6d4c41;
