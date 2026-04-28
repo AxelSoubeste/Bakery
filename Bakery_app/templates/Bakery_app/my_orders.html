@@ -1,20 +1,41 @@
 {% extends 'Bakery_app/base.html' %}
 {% load static %}
 
-{% block title %}Yara's Bakery{% endblock %}
+{% block title %}My Orders{% endblock %}
 
 {% block content %}
-<a href="{% url 'home' %}"><button>Back</button></a>
-<h2>My Orders</h2>
-{% for order in orders %}
-    <hr>
-    <div>
-        <p>Order #{{ order.id }}</p>
-        <p>Date: {{ order.date }}</p>
-        <p>Total: ${{ order.total_calculated }}</p>
+
+<div class="orders-page">
+
+    <button class="btn-back" onclick="history.back()">Back</button>
+
+    <div class="orders-card">
+
+        <h1>📦 My Orders</h1>
+
+        {% for order in orders %}
+
+        <div class="order-item">
+
+            <div class="order-left">
+                <h3>Order #{{ order.id }}</h3>
+                <p>Date: {{ order.date }}</p>
+            </div>
+
+            <div class="order-right">
+                ${{ order.total_calculated }}
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p class="no-orders">No orders yet.</p>
+
+        {% endfor %}
+
     </div>
-{% empty %}
-    <p>No orders yet.</p>
-{% endfor %}
+
+</div>
 
 {% endblock %}

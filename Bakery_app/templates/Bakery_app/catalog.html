@@ -5,23 +5,38 @@
 
 {% block content %}
 
-<a href="{% url 'home' %}"><button>Back</button></a>
+<div class="catalog-header">
+    <button class="btn-back" onclick="history.back()">Back</button>
+    <h1>Our Products</h1>
+</div>
 
-<a href="{% url 'empty_cart' %}">Empty Cart</a>
-{% for product in products %}
-    <hr>
-    <div>
-        <h3>{{ product.name }}</h3>
-        <p>${{ product.price }}</p>
+<div class="catalog-grid">
+
+    {% for product in products %}
+    <div class="product-card">
+
         {% if product.image %}
-            <img src="{{ product.image.url }}" width="200">
+            <img src="{{ product.image.url }}" class="product-img">
         {% else %}
-            <p>No image</p>
+            <div class="no-image">No Image</div>
         {% endif %}
-        <a href="{% url 'add_to_cart' product.id %}">+</a>
-        <a href="{% url 'remove_product' product.id %}">-</a>
-        <a href="{% url 'delete_to_cart' product.id %}">Delete</a>
+
+        <h3>{{ product.name }}</h3>
+
+        <p class="price">${{ product.price }}</p>
+
+        <div class="qty-controls">
+            <a href="{% url 'remove_product' product.id %}">-</a>
+            <a href="{% url 'add_to_cart' product.id %}">+</a>
+        </div>
+
+        <a href="{% url 'delete_to_cart' product.id %}" class="delete-btn">
+            Delete
+        </a>
+
     </div>
-{% endfor %}
+    {% endfor %}
+
+</div>
 
 {% endblock %}

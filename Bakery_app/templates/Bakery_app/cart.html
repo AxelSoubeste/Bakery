@@ -1,18 +1,59 @@
 {% extends 'Bakery_app/base.html' %}
 {% load static %}
 
-{% block title %}Yara's Bakery{% endblock %}
+{% block title %}Cart{% endblock %}
 
 {% block content %}
-<a href="{% url 'home' %}"><button>Back</button></a>
 
-<h2>Cart</h2>
+<div class="cart-page">
 
-{% for key, item in cart.items %}
-    <p>{{ item.name }} - {{ item.stock }} x ${{ item.price }}</p>
-{% endfor %}
+    <button class="btn-back" onclick="history.back()">Back</button>
 
-<h3>Total: ${{ total }}</h3>
+    <div class="cart-card">
 
-<a href="{% url 'checkout' %}"><button type="submit">Buy</button></a>
+        <h1>🛒 Your Cart</h1>
+
+        {% if total != 0 %}
+
+            <a href="{% url 'empty_cart' %}" class="empty-cart">
+                Empty Cart
+            </a>
+
+            <div class="cart-items">
+
+                {% for key, item in cart.items %}
+                <div class="cart-item">
+
+                    <div class="item-info">
+                        <h3>{{ item.name }}</h3>
+                        <p>Quantity: {{ item.stock }}</p>
+                    </div>
+
+                    <div class="item-price">
+                        ${{ item.price }}
+                    </div>
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <div class="cart-total">
+                Total: ${{ total }}
+            </div>
+
+            <a href="{% url 'checkout' %}" class="buy-btn">
+                Buy Now
+            </a>
+
+        {% else %}
+
+            <p class="empty-message">The cart is empty.</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
 {% endblock %}
