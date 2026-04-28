@@ -575,3 +575,134 @@ body{
     font-weight:bold;
     text-decoration:none;
 }
+
+.order-item form{
+    margin:0;
+}
+
+.order-right .product-img{
+    width:120px;
+    height:120px;
+    object-fit:contain;
+    margin:0;
+}
+
+.order-left p{
+    margin-bottom:6px;
+}
+
+@media (max-width: 768px){
+
+    .order-item{
+        flex-direction:column;
+        text-align:center;
+        gap:20px;
+    }
+
+    .order-left div{
+        justify-content:center;
+    }
+
+    .btn-back{
+        padding:12px 18px;
+        font-size:16px;
+    }
+
+    .orders-card h1{
+        font-size:30px;
+    }
+}
+
+.file-box{
+    background:#e6d6bf;
+    padding:22px;
+    border-radius:22px;
+    text-align:center;
+}
+
+.file-box label{
+    display:block;
+    color:#5e4634;
+    font-weight:bold;
+    margin-bottom:18px;
+    font-size:18px;
+}
+
+.file-box input[type="file"]{
+    width:100%;
+    font-size:15px;
+    color:#6d4c41;
+    cursor:pointer;
+    background:#f3ece4;
+    padding:18px;
+    border-radius:20px;
+    border:2px dashed #d0b999;
+}
+
+.file-box input[type="file"]::file-selector-button{
+    border:none;
+    background:#6d4c41;
+    color:white;
+    padding:12px 22px;
+    border-radius:14px;
+    margin-right:15px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.file-box input[type="file"]::file-selector-button:hover{
+    background:#5a3c32;
+    transform:translateY(-2px);
+}
+
+.file-box input[type="file"]:hover{
+    border-color:#b58e63;
+}
+
+@media (max-width:768px){
+
+    .register-card{
+        padding:35px 25px;
+    }
+
+    .register-card h1{
+        font-size:34px;
+    }
+}
+
+.current-image-box{
+    background:#e6d6bf;
+    padding:22px;
+    border-radius:22px;
+    text-align:center;
+}
+
+.current-image-box label{
+    display:block;
+    color:#5e4634;
+    font-weight:bold;
+    font-size:18px;
+    margin-bottom:16px;
+}
+
+.edit-product-img{
+    width:170px;
+    height:170px;
+    object-fit:contain;
+    background:#f3ece4;
+    padding:14px;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.current-image-box .no-image{
+    height:170px;
+    background:#f3ece4;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#6d4c41;
+    font-weight:bold;
+}

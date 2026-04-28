@@ -5,36 +5,70 @@
 
 {% block content %}
 
-<a href="{% url 'home' %}"><button>Back</button></a>
+<div class="container">
 
-<h2>Panel of Products</h2>
+    <a href="{% url 'home' %}">
+        <button class="btn-back">Back</button>
+    </a>
 
-<a href="{% url 'add_product' %}">Add Products</a>
+    <div class="orders-page">
+        <div class="orders-card">
 
-<hr>
+            <h1>Panel of Products</h1>
 
-{% for product in products %}
-    <div>
-        <h3>{{ product.name }}</h3>
-        <p>Price: ${{ product.price }}</p>
-        <p>Stock: {{ product.stock }}</p>
-        {% if product.image %}
-            <img src="{{ product.image.url }}" width="150">
-        {% else %}
-            <p>No image</p>
-        {% endif %}
+            <div style="text-align:center; margin-bottom:30px;">
+                <a href="{% url 'add_product' %}" class="catalog-btn">
+                    + Add Product
+                </a>
+            </div>
 
-        <br>
+            {% for product in products %}
+                <div class="order-item">
 
-        <a href="{% url 'edit_product' product.id %}">✏️ Edit</a>
+                    <div class="order-left">
 
-        <form action="{% url 'delete_product' product.id %}" method="POST" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">🗑️ Delete</button>
-        </form>
+                        <h3>{{ product.name }}</h3>
+                        <p>Price: ${{ product.price }}</p>
+                        <p>Stock: {{ product.stock }}</p>
 
-        <hr>
+                        <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+
+                            <a href="{% url 'edit_product' product.id %}" class="delete-btn">
+                                ✏️ Edit
+                            </a>
+
+                            <form action="{% url 'delete_product' product.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-btn">
+                                    🗑️ Delete
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    <div class="order-right">
+
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="product-img">
+                        {% else %}
+                            <div class="no-image">No image</div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="no-orders">No products loaded.</p>
+
+            {% endfor %}
+
+        </div>
     </div>
-{% endfor %}
+
+</div>
 
 {% endblock %}

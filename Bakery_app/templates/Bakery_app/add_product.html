@@ -4,33 +4,44 @@
 {% block title %}Add Products{% endblock %}
 
 {% block content %}
-<a href="{% url 'dashboard' %}"><button>Back</button></a>
-<h2>Add Product</h2>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="container">
 
-    <div>
-        <label>Name:</label>
-        <input type="text" name="name" required>
+    <a href="{% url 'dashboard' %}">
+        <button class="btn-back">Back</button>
+    </a>
+
+    <div class="register-page">
+
+        <div class="register-card">
+
+            <h1>Add Product</h1>
+            <p>Complete the information to add a new product.</p>
+
+            <form method="POST" enctype="multipart/form-data" class="register-form">
+                {% csrf_token %}
+
+                <input type="text" name="name" placeholder="Product name" required>
+
+                <input type="number" step="0.01" name="price" placeholder="Price" required>
+
+                <input type="number" min="0" step="1" name="stock" placeholder="Stock">
+
+                <div class="file-box">
+                    <label>Select image</label>
+                    <input type="file" name="image" required>
+                </div>
+
+                <button type="submit" class="register-btn">
+                    Save Product
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div>
-        <label>Price:</label>
-        <input type="number" step="0.01" name="price" required>
-    </div>
-
-    <div>
-        <label>Image:</label>
-        <input type="file" name="image" required>
-    </div>
-
-    <div>
-        <label>Stock:</label>
-        <input type="number" min="0" step="1" name="stock">
-    </div>
-
-    <button type="submit">Save</button>
-</form>
+</div>
 
 {% endblock %}
